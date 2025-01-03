@@ -1,13 +1,13 @@
 fileFormatVersion: 2
-guid: 2866e941d5fb82d439a92f6846ad039e
+guid: 54f945ed5853bab45b46860dedcd5d10
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 865929782535506894
-    second: small_char_idle_0
+      213: 2186229983965324031
+    second: small_char_0
   - first:
-      213: -8918270989193270862
-    second: small_char_idle_1
+      213: 1497910044071394783
+    second: small_char_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -40,7 +40,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -129,45 +129,45 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: small_char_idle_0
+      name: small_char_running (16x16)_0
       rect:
         serializedVersion: 2
-        x: 2
-        y: 0
-        width: 10
-        height: 15
+        x: 0
+        y: 128
+        width: 128
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: ecbc570ac86640c00800000000000000
-      internalID: 865929782535506894
+      spriteID: c960098efd9672f439fc2c4187a1c18b
+      internalID: 1083759820
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: small_char_idle_1
+      name: small_char_running (16x16)_1
       rect:
         serializedVersion: 2
-        x: 18
+        x: 0
         y: 0
-        width: 10
-        height: 14
+        width: 128
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 2b9a67e49cfeb3480800000000000000
-      internalID: -8918270989193270862
+      spriteID: 0e1372250799a4c4a88188f6efce4b31
+      internalID: -1935701908
       vertices: []
       indices: 
       edges: []
@@ -176,7 +176,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 70dd70facab057a4c8f8ae583539aa6a
     internalID: 0
     vertices: []
     indices: 
@@ -185,7 +185,9 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      small_char_running (16x16)_0: 1083759820
+      small_char_running (16x16)_1: -1935701908
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
