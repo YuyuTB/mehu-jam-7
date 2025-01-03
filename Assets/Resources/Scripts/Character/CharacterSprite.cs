@@ -15,6 +15,7 @@ public class CharacterSprite : MonoBehaviour
     private SpriteRenderer _spriteRenderer;
     private Animator _animator;
     private CharacterMovement _characterMovement;
+    private CharacterResolution _characterResolution;
 
     private void Awake()
     {
@@ -23,18 +24,17 @@ public class CharacterSprite : MonoBehaviour
         _idleAnimators = new RuntimeAnimatorController[totalCharacterTypes];
         _runningAnimators = new RuntimeAnimatorController[totalCharacterTypes];
     }
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    
     void Start()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _animator = GetComponent<Animator>();
         _characterMovement = GetComponent<CharacterMovement>();
+        _characterResolution = GetComponent<CharacterResolution>();
 
         DefineCharacterSprites();
     }
-
-    // Update is called once per frame
+    
     void Update()
     {
         CheckIfRunning();
@@ -42,6 +42,8 @@ public class CharacterSprite : MonoBehaviour
 
     private void CheckIfRunning()
     {
+        // If the character is low definition, the character type is 0, otherwise it is 1
+        int characterType = _characterResolution.isLowDefinition ? 0 : 1;
         /*
             Checks if the character is moving sideways
             and sets the sprite and animator accordingly
@@ -51,13 +53,13 @@ public class CharacterSprite : MonoBehaviour
             // Mirrors the walking sprite if the character is going left
             _spriteRenderer.flipX = _characterMovement.isGoingLeft;
 
-            _spriteRenderer.sprite = _runningSprites[0];
-            _animator.runtimeAnimatorController = _runningAnimators[0];
+            _spriteRenderer.sprite = _runningSprites[characterType];
+            _animator.runtimeAnimatorController = _runningAnimators[characterType];
         }
         else
         {
-            _spriteRenderer.sprite = _idleSprites[0];
-            _animator.runtimeAnimatorController = _idleAnimators[0];
+            _spriteRenderer.sprite = _idleSprites[characterType];
+            _animator.runtimeAnimatorController = _idleAnimators[characterType];
         }
     }
 

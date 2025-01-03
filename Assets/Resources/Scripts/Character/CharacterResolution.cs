@@ -2,18 +2,18 @@ using UnityEngine;
 
 public class CharacterResolution : MonoBehaviour
 {
-    public bool isLowDefinition = true;
+    // Character high definition on initialization
+    public bool isLowDefinition;
     
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private float _colliderRadius;
+    private float _colliderHeight;
+    
+    private CharacterController _controller;
+    
     void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        _controller = GetComponent<CharacterController>();
+        DefineCharacterStateByResolution();
     }
     
     public void SetDefinition(string definition)
@@ -22,5 +22,19 @@ public class CharacterResolution : MonoBehaviour
             If the definition received is "low", the character is set to low definition, otherwise it is set to high definition
          */
         isLowDefinition = definition == "low";
+        DefineCharacterStateByResolution();
+        SetCollider();
+    }
+    
+    private void DefineCharacterStateByResolution()
+    {
+        _colliderRadius = isLowDefinition ? 0.5f : 0.8f;
+        _colliderHeight = isLowDefinition ? 1.25f : 2.55f;
+    }
+    
+    private void SetCollider()
+    {
+        _controller.radius = _colliderRadius;
+        _controller.height = _colliderHeight;
     }
 }
