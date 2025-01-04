@@ -5,7 +5,12 @@ TagManager:
   serializedVersion: 3
   tags:
   - Ground
-  - Ennemy
+  - Traveling_Stop
+  - Enemy
+  - Detection_Radius
+  - Bullet
+  - Fireball
+  - Wall
   layers:
   - Default
   - TransparentFX
@@ -13,8 +18,8 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - Ground
+  - Player
   - 
   - 
   - 

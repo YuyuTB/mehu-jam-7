@@ -3,6 +3,7 @@ using UnityEngine;
 public class Fireball : MonoBehaviour
 {
     private const float ProjectileSpeed = 10f;
+    private const float ProjectileLifetime = 0.5f;
     
     private bool _isGoingLeft;
     
@@ -12,6 +13,7 @@ public class Fireball : MonoBehaviour
     void Update()
     {
         Move();
+        CountdownToExpire();
     }
     
     // Initialize the fireball with the character movement on instantiation
@@ -23,6 +25,11 @@ public class Fireball : MonoBehaviour
         _isGoingLeft = _characterMovement.isGoingLeft;
     }
     
+    private void CountdownToExpire()
+    {
+        Destroy(gameObject, ProjectileLifetime);
+    }
+    
     private void Move()
     {
         transform.Translate(
@@ -32,9 +39,19 @@ public class Fireball : MonoBehaviour
     
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.CompareTag("Ennemy"))
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            Destroy(other.transform.parent.gameObject);
+        }
+        
+        if (other.gameObject.CompareTag("Wall"))
         {
             Destroy(gameObject);
+        }
+        
+        if (other.gameObject.CompareTag("Bullet"))
+        {
+            Destroy(other.gameObject);
         }
     }
 }

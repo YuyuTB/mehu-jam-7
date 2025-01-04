@@ -74,7 +74,10 @@ public class CharacterAttack : MonoBehaviour
     {
         // Instantiates the fireball in front of the player and passes it the character's direction
         Vector3 fireballPosition = transform.position;
-        fireballPosition.x += _fireballTransformX;
+        float directionOffset = _characterMovement.isGoingLeft ? -transform.localScale.x : transform.localScale.x;
+        fireballPosition.x += directionOffset + _fireballTransformX;
+        fireballPosition.y -= 0.2f;
+        
         GameObject fireballInstance = Instantiate(_fireball, fireballPosition, Quaternion.identity);
         Fireball fireballScript = fireballInstance.GetComponent<Fireball>();
         fireballScript.Initialize(_characterMovement);

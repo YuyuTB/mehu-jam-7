@@ -22,7 +22,10 @@ public class PlayerCamera : MonoBehaviour
     {
         SetPosition();
         SetOffset();
-        FollowPlayer();
+        if (player != null)
+        {
+            FollowPlayer();
+        }
     }
     
     // Makes the camera follow the player
@@ -36,13 +39,13 @@ public class PlayerCamera : MonoBehaviour
     // Sets the offset of the camera
     private void SetOffset()
     {
-        float yOffset = _characterResolution.isLowDefinition ? 0.5f : 2f;
+        float yOffset = _characterResolution.isLowDefinition ? 1.5f : 3f;
         _offset = new Vector3(0, yOffset, -10f);
     }
 
     // Determines the camera's position relative to the player
     private void SetPosition()
     {
-        _camera.orthographicSize = _characterResolution.isLowDefinition ? 2 : 4;
+        _camera.orthographicSize = _characterResolution.isLowDefinition ? 3 : 6;
     }
 }
