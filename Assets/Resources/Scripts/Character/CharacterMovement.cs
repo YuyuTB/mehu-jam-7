@@ -2,19 +2,20 @@ using UnityEngine;
 
 public class CharacterMovement : MonoBehaviour
 {
-    [SerializeField] private float speed = 5.0f;
-    [SerializeField] private float jumpHeight = 3.0f;
+    [SerializeField] private float speed = 3.0f;
+    [SerializeField] private float jumpHeight = 1.5f;
 
     public bool isGoingRight;
     public bool isGoingLeft;
+    public bool isGrounded;
     
-    private CharacterController _controller;
+    private Rigidbody2D _rb;
     private float _gravity;
     private Vector3 _velocity;
 
     void Start()
     {
-        _controller = GetComponent<CharacterController>();
+        _rb = GetComponent<Rigidbody2D>();
         _gravity = Physics.gravity.y;
     }
 
@@ -26,7 +27,23 @@ public class CharacterMovement : MonoBehaviour
         CheckIfRunning();
         
         // Apply the vertical velocity
-        _controller.Move(_velocity * Time.deltaTime);
+        _rb.linearVelocity = new Vector2(_rb.linearVelocity.x, _velocity.y);
+    }
+    
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = true;
+        }
+    }
+    
+    private void OnCollisionExit2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = false;
+        }
     }
     
     private void CheckIfRunning()
@@ -46,12 +63,12 @@ public class CharacterMovement : MonoBehaviour
         
         float moveSpeed = speed * horizontal * Time.deltaTime;
         Vector3 movement = new Vector3(moveSpeed, 0, 0);
-        _controller.Move(movement);
+        _rb.transform.position += movement;
     }
 
     private void Jump()
     {
-        if (_controller.isGrounded && Input.GetAxis("Jump") > 0)
+        if (isGrounded && Input.GetAxis("Jump") > 0)
         {
             _velocity.y = Mathf.Sqrt(jumpHeight * -2f * _gravity);
         }
@@ -59,7 +76,7 @@ public class CharacterMovement : MonoBehaviour
 
     private void ApplyGravity()
     {
-        if (!_controller.isGrounded)
+        if (!isGrounded)
         {
             _velocity.y += _gravity * Time.deltaTime;
         }

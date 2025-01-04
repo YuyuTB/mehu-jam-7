@@ -3,24 +3,22 @@ using UnityEngine;
 public class Soup : MonoBehaviour
 {
     [SerializeField] private Sprite soupSprite;
-    [SerializeField] private float scale;
-    
     [SerializeField] private SoupColor soupColor;
-    private SoupEffect _soupEffect;
     
-    // Defines the possible colors of the soup
+    private float _scale;
+    
     private enum SoupColor { Yellow, Blue }
-    //Defines the possible effects of the soup
     private enum SoupEffect { LowDefinition, HighDefinition }
     
     private SpriteRenderer _spriteRenderer;
+    private SoupEffect _soupEffect;
 
     void Start()
     {
         DefineSoupType();
     }
-    
-    private void OnTriggerEnter(Collider other)
+
+    private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
@@ -54,19 +52,21 @@ public class Soup : MonoBehaviour
             // The yellow soup makes the player low definition
             case SoupColor.Yellow:
                 soupSprite = Resources.Load<Sprite>(basePath + "yellow_soup");
-                scale = 0.4f;
+                _scale = 0.4f;
                 _soupEffect = SoupEffect.LowDefinition;
                 break;
             // The blue soup makes the player high definition
             case SoupColor.Blue:
                 soupSprite = Resources.Load<Sprite>(basePath + "blue_soup");
-                scale = 0.2f;
+                _scale = 0.2f;
                 _soupEffect = SoupEffect.HighDefinition;
                 break;
         }
         
-        // Apply the sprite and scale of the soup
+        // Apply the sprite and _scale of the soup
         _spriteRenderer.sprite = soupSprite;
-        transform.localScale = new Vector3(scale, scale, 1);
+        transform.localScale = new Vector3(_scale, _scale, 1);
     }
+    
+    
 }

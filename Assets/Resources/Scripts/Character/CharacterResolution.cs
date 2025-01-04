@@ -7,12 +7,12 @@ public class CharacterResolution : MonoBehaviour
     
     private float _colliderRadius;
     private float _colliderHeight;
-    
-    private CharacterController _controller;
+
+    private BoxCollider2D _boxCollider2D;
     
     void Start()
     {
-        _controller = GetComponent<CharacterController>();
+        _boxCollider2D = GetComponent<BoxCollider2D>();
         DefineCharacterStateByResolution();
     }
     
@@ -28,13 +28,15 @@ public class CharacterResolution : MonoBehaviour
     
     private void DefineCharacterStateByResolution()
     {
-        _colliderRadius = isLowDefinition ? 0.5f : 0.8f;
-        _colliderHeight = isLowDefinition ? 1.25f : 2.55f;
+        _colliderRadius = isLowDefinition ? 0.75f : 1.7f;
+        _colliderHeight = isLowDefinition ? 1.15f : 2.4f;
     }
     
     private void SetCollider()
     {
-        _controller.radius = _colliderRadius;
-        _controller.height = _colliderHeight;
+        Vector2 newSize = _boxCollider2D.size;
+        newSize.x = _colliderRadius;
+        newSize.y = _colliderHeight;
+        _boxCollider2D.size = newSize;
     }
 }

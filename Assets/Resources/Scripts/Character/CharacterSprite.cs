@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class CharacterSprite : MonoBehaviour
@@ -6,6 +5,8 @@ public class CharacterSprite : MonoBehaviour
     // The sprites and animators for the character
     // Index : 0 Small character, 1 Big character
     [SerializeField] private int totalCharacterTypes = 2;
+    private bool _isMoving;
+    private bool _wasMovingBeforeJump;
     
     private Sprite[] _idleSprites;
     private Sprite[] _runningSprites;
@@ -38,28 +39,47 @@ public class CharacterSprite : MonoBehaviour
     void Update()
     {
         CheckIfRunning();
+        ApplySpritesAndAnimations();
     }
 
     private void CheckIfRunning()
     {
-        // If the character is low definition, the character type is 0, otherwise it is 1
-        int characterType = _characterResolution.isLowDefinition ? 0 : 1;
-        /*
-            Checks if the character is moving sideways
-            and sets the sprite and animator accordingly
-         */
-        if (_characterMovement.isGoingLeft || _characterMovement.isGoingRight)
+        // Update movement state based on character movement
+        _isMoving = _characterMovement.isGoingLeft || _characterMovement.isGoingRight;
+        
+        // Update the state for when the character jumps
+        if (_characterMovement.isGrounded)
         {
-            // Mirrors the walking sprite if the character is going left
-            _spriteRenderer.flipX = _characterMovement.isGoingLeft;
-
-            _spriteRenderer.sprite = _runningSprites[characterType];
-            _animator.runtimeAnimatorController = _runningAnimators[characterType];
+            _wasMovingBeforeJump = _isMoving;
         }
-        else
+    }
+
+    private void ApplySpritesAndAnimations()
+    {
+        // Determine character type: 0 for low definition, 1 for high definition
+        int characterType = _characterResolution.isLowDefinition ? 0 : 1;
+
+        // Handle jumping state
+        if (!_characterMovement.isGrounded)
         {
-            _spriteRenderer.sprite = _idleSprites[characterType];
-            _animator.runtimeAnimatorController = _idleAnimators[characterType];
+            // Use different sprites based on whether the character was moving before jumping
+            _spriteRenderer.sprite = _wasMovingBeforeJump
+                ? _runningSprites[characterType] // Jumped while running
+                : _idleSprites[characterType];  // Jumped while idle
+            _animator.runtimeAnimatorController = null; // Disable animations during jump
+            return;
+        }
+
+        // Handle grounded states: set idle or running sprites and animations depending on movement
+        if (_characterMovement.isGrounded)
+        {
+            _spriteRenderer.flipX = _characterMovement.isGoingLeft;
+            _spriteRenderer.sprite = _isMoving
+                ? _runningSprites[characterType]
+                : _idleSprites[characterType];
+            _animator.runtimeAnimatorController = _isMoving 
+                ? _runningAnimators[characterType] 
+                : _idleAnimators[characterType];
         }
     }
 
