@@ -1,17 +1,18 @@
+using System.Collections;
 using UnityEngine;
 
 public class CharacterSprite : MonoBehaviour
 {
-    // The sprites and animators for the character
-    // Index : 0 Small character, 1 Big character
-    [SerializeField] private int totalCharacterTypes = 2;
     private bool _isMoving;
     private bool _wasMovingBeforeJump;
     
+    // Sprites Index : 0 Small character, 1 Big character
     private Sprite[] _idleSprites;
     private Sprite[] _runningSprites;
     private RuntimeAnimatorController[] _idleAnimators;
     private RuntimeAnimatorController[] _runningAnimators;
+    // Big character specifics
+    private Sprite _attackingSprite;
 
     private SpriteRenderer _spriteRenderer;
     private Animator _animator;
@@ -20,10 +21,10 @@ public class CharacterSprite : MonoBehaviour
 
     private void Awake()
     {
-        _idleSprites = new Sprite[totalCharacterTypes];
-        _runningSprites = new Sprite[totalCharacterTypes];
-        _idleAnimators = new RuntimeAnimatorController[totalCharacterTypes];
-        _runningAnimators = new RuntimeAnimatorController[totalCharacterTypes];
+        _idleSprites = new Sprite[2];
+        _runningSprites = new Sprite[2];
+        _idleAnimators = new RuntimeAnimatorController[2];
+        _runningAnimators = new RuntimeAnimatorController[2];
     }
     
     void Start()
@@ -32,7 +33,7 @@ public class CharacterSprite : MonoBehaviour
         _animator = GetComponent<Animator>();
         _characterMovement = GetComponent<CharacterMovement>();
         _characterResolution = GetComponent<CharacterResolution>();
-
+        
         DefineCharacterSprites();
     }
     
@@ -58,7 +59,16 @@ public class CharacterSprite : MonoBehaviour
     {
         // Determine character type: 0 for low definition, 1 for high definition
         int characterType = _characterResolution.isLowDefinition ? 0 : 1;
-
+        
+        if (_characterMovement.isMovementStoppedForAttack)
+        {
+            // Use attacking sprite and disable animations
+            _spriteRenderer.sprite = _attackingSprite;
+            _spriteRenderer.flipX = _characterMovement.isGoingLeft;
+            _animator.runtimeAnimatorController = null;
+            return;
+        }
+        
         // Handle jumping state
         if (!_characterMovement.isGrounded)
         {
@@ -101,5 +111,7 @@ public class CharacterSprite : MonoBehaviour
         _idleAnimators[1] = Resources.Load<RuntimeAnimatorController>(basePathBig + "Animations/big_char_idle_0");
         _runningSprites[1] = Resources.Load<Sprite>(basePathBig + "big_char_running");
         _runningAnimators[1] = Resources.Load<RuntimeAnimatorController>(basePathBig + "Animations/big_char_running_0");
+        // Attack sprite and animator
+        _attackingSprite = Resources.Load<Sprite>(basePathBig + "big_char_attacking");
     }
 }

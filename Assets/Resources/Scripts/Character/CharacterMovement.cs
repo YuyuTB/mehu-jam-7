@@ -1,13 +1,16 @@
+using System.Collections;
 using UnityEngine;
 
 public class CharacterMovement : MonoBehaviour
 {
     [SerializeField] private float speed = 3.0f;
     [SerializeField] private float jumpHeight = 1.5f;
+    [SerializeField] private float attackStopDuration = 0.3f;
 
     public bool isGoingRight;
     public bool isGoingLeft;
     public bool isGrounded;
+    public bool isMovementStoppedForAttack;
     
     private Rigidbody2D _rb;
     private float _gravity;
@@ -21,10 +24,13 @@ public class CharacterMovement : MonoBehaviour
 
     void Update()
     {
-        Move();
-        ApplyGravity();
-        Jump();
-        CheckIfRunning();
+        if (!isMovementStoppedForAttack)
+        {
+            Move();
+            ApplyGravity();
+            Jump();
+            CheckIfRunning();
+        }
         
         // Apply the vertical velocity
         _rb.linearVelocity = new Vector2(_rb.linearVelocity.x, _velocity.y);
@@ -84,5 +90,18 @@ public class CharacterMovement : MonoBehaviour
         {
             _velocity.y = 0f;
         }
+    }
+    
+    public void StopMovementForAttack()
+    {
+        StartCoroutine(StopMovementCoroutine());
+    }
+
+    // Stops the character's movement for a short duration
+    private IEnumerator StopMovementCoroutine()
+    {
+        isMovementStoppedForAttack = true;
+        yield return new WaitForSeconds(attackStopDuration);
+        isMovementStoppedForAttack = false;
     }
 }
