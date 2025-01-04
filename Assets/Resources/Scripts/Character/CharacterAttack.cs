@@ -37,7 +37,8 @@ public class CharacterAttack : MonoBehaviour
         // Returns if no input or if the character is already attacking
         if (!attackInput 
             || _characterMovement.isMovementStoppedForAttack
-            || !_isMoving)
+            || !_isMoving
+            || !_characterMovement.isGrounded)
         {
             return;
         }

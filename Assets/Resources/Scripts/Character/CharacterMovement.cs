@@ -108,6 +108,7 @@ public class CharacterMovement : MonoBehaviour
     private IEnumerator StopMovementCoroutine()
     {
         isMovementStoppedForAttack = true;
+        _velocity.y = 0f;
         yield return new WaitForSeconds(attackStopDuration);
         isMovementStoppedForAttack = false;
     }
