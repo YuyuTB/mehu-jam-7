@@ -9,11 +9,18 @@ public class EnemyMovement : MonoBehaviour
     
     private Rigidbody2D _rb;
     private EnemyAttack _enemyAttack;
+    private AudioSource _audioSource;
+    
+    public float loopStartTime = 0.5f; // Start time in seconds
+    public float loopEndTime = 3.0f;   // End time in seconds
 
     void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
         _enemyAttack = GetComponent<EnemyAttack>();
+        _audioSource = GetComponent<AudioSource>();
+        DefineAudioSource();
+        PlayAudio();
     }
 
     private void Update()
@@ -22,6 +29,32 @@ public class EnemyMovement : MonoBehaviour
         if (!_enemyAttack.isAttacking)
         {
             Move();
+            _audioSource.UnPause();
+        }
+        else
+        {
+            _audioSource.Pause();
+        }
+        
+        // Check if the audio has passed the loop end time
+        if (_audioSource.time >= loopEndTime)
+        {
+            // Set the time back to the loop start time
+            _audioSource.time = loopStartTime;
+        }
+    }
+    
+    private void DefineAudioSource()
+    {
+        _audioSource.clip = Resources.Load<AudioClip>("Audio/SFX/EnemyWalk");
+    }
+    
+    private void PlayAudio()
+    {
+        if (!_audioSource.isPlaying)
+        {
+            _audioSource.Play();
+            _audioSource.loop = true;
         }
     }
     

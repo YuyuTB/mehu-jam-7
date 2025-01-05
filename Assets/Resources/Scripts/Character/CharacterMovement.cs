@@ -19,12 +19,20 @@ public class CharacterMovement : MonoBehaviour
     private float _gravity;
     private Vector3 _velocity;
     private CharacterResolution _characterResolution;
+    
+    private AudioSource _audioSource;
+    
+    public float loopStartTime = 0.5f; // Start time in seconds
+    public float loopEndTime = 2.0f;   // End time in seconds
 
     void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
         _characterResolution = GetComponent<CharacterResolution>();
+        _audioSource = GetComponent<AudioSource>();
         _gravity = Physics.gravity.y;
+        DefineAudioSource();
+        PlayAudio();
     }
 
     void Update()
@@ -32,6 +40,13 @@ public class CharacterMovement : MonoBehaviour
         if (!isMovementStoppedForAttack)
         {
             CheckIfRunning();
+        }
+        
+        // Check if the audio has passed the loop end time
+        if (_audioSource.time >= loopEndTime)
+        {
+            // Set the time back to the loop start time
+            _audioSource.time = loopStartTime;
         }
     }
 
@@ -48,6 +63,20 @@ public class CharacterMovement : MonoBehaviour
         _rb.linearVelocity = new Vector2(_rb.linearVelocity.x, _velocity.y);
     }
     
+    private void DefineAudioSource()
+    {
+        _audioSource.clip = Resources.Load<AudioClip>("Audio/SFX/Walk");
+    }
+    
+    private void PlayAudio()
+    {
+        if (!_audioSource.isPlaying)
+        {
+            _audioSource.Play();
+            _audioSource.loop = true;
+        }
+    }
+    
     private void CheckIfRunning()
     {
         isGoingLeft = Input.GetAxis("Horizontal") < 0;
@@ -61,17 +90,22 @@ public class CharacterMovement : MonoBehaviour
         // Returns if no input or if the character is touching a wall in the direction of movement
         if (horizontal == 0)
         {
+            _audioSource.Pause();
             return;
         }
         if (_isTouchingWallLeft 
             && horizontal < 0)
         {
+            _audioSource.Pause();
             return;
         } 
         if (_isTouchingWallRight && horizontal > 0)
         {
+            _audioSource.Pause();
             return;
         }
+        
+        _audioSource.UnPause();
         
         float moveSpeed = speed * horizontal * Time.deltaTime;
         Vector3 movement = new Vector3(moveSpeed, 0, 0);
@@ -84,7 +118,15 @@ public class CharacterMovement : MonoBehaviour
         
         if (isGrounded && Input.GetAxis("Jump") > 0)
         {
+            // Play the jump sound effect
+            _audioSource.clip = Resources.Load<AudioClip>("Audio/SFX/Jump");
+            _audioSource.loop = false;
+            _audioSource.Play();
             _velocity.y = Mathf.Sqrt(jumpHeight * -2f * _gravity);
+            // Go back to the walk sound effect
+            _audioSource.clip = Resources.Load<AudioClip>("Audio/SFX/Walk");
+            _audioSource.loop = true;
+            _audioSource.Play();
         }
     }
 
@@ -147,5 +189,26 @@ public class CharacterMovement : MonoBehaviour
             _isTouchingWallLeft = false;
             _isTouchingWallRight = false;
         }
+
+        if (other.gameObject.CompareTag("Soup"))
+        {
+            _audioSource.clip = Resources.Load<AudioClip>("Audio/SFX/Drink");
+            _audioSource.time = 0.05f;
+            _audioSource.loop = false;
+            _audioSource.Play();
+
+            StartCoroutine(StopMovementCoroutine());
+            StartCoroutine(ResumeWalkingSoundAfterDrink());
+        }
+    }
+    private IEnumerator ResumeWalkingSoundAfterDrink()
+    {
+        // Wait for the drinking sound to finish
+        yield return new WaitForSeconds(_audioSource.clip.length - 0.05f);
+
+        _audioSource.clip = Resources.Load<AudioClip>("Audio/SFX/Move");
+        _audioSource.loop = true;
+        _audioSource.time = loopStartTime;
+        _audioSource.Play();
     }
 }

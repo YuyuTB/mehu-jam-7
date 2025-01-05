@@ -10,6 +10,7 @@ public class Bullet : MonoBehaviour
     
     private SpriteRenderer _spriteRenderer;
     private EnemyMovement _enemyMovement;
+    private AudioSource _audioSource;
     
     void Update()
     {
@@ -23,6 +24,9 @@ public class Bullet : MonoBehaviour
         Vector2 direction
     )
     {
+        _audioSource = GetComponent<AudioSource>();
+        DefineAudioSource();
+        PlayAudio();
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _enemyMovement = enemyMovement;
         _spriteRenderer.flipX = _enemyMovement.isGoingLeft;
@@ -35,6 +39,20 @@ public class Bullet : MonoBehaviour
         transform.Translate(
                 _direction * (ProjectileSpeed * Time.deltaTime)
         );
+    }
+    
+    private void DefineAudioSource()
+    {
+        _audioSource.clip = Resources.Load<AudioClip>("Audio/SFX/Shoot");
+        _audioSource.time = 0.6f;
+    }
+    
+    private void PlayAudio()
+    {
+        if (!_audioSource.isPlaying)
+        {
+            _audioSource.Play();
+        }
     }
     
     private void CountdownToExpire()

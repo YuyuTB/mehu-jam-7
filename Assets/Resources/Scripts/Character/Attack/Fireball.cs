@@ -6,8 +6,9 @@ public class Fireball : MonoBehaviour
     private const float ProjectileLifetime = 0.5f;
     
     private bool _isGoingLeft;
-    
+
     private SpriteRenderer _spriteRenderer;
+    private AudioSource _audioSource;
     private CharacterMovement _characterMovement;
     
     void Update()
@@ -20,6 +21,11 @@ public class Fireball : MonoBehaviour
     public void Initialize(CharacterMovement characterMovement)
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
+        _audioSource = GetComponent<AudioSource>();
+        DefineAudioSource();
+        // When the fireball is instantiated, the sound starts at 0.5 seconds of the total sound duration
+        _audioSource.time = 0.5f;
+        _audioSource.Play();
         _characterMovement = characterMovement;
         _spriteRenderer.flipX = _characterMovement.isGoingLeft;
         _isGoingLeft = _characterMovement.isGoingLeft;
@@ -28,6 +34,11 @@ public class Fireball : MonoBehaviour
     private void CountdownToExpire()
     {
         Destroy(gameObject, ProjectileLifetime);
+    }
+
+    private void DefineAudioSource()
+    {
+        _audioSource.clip = Resources.Load<AudioClip>("Audio/SFX/Fireball");
     }
     
     private void Move()
@@ -41,6 +52,9 @@ public class Fireball : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Enemy"))
         {
+            _audioSource.clip = Resources.Load<AudioClip>("Audio/SFX/KillEnemy");
+            _audioSource.time = 0.5f;
+            _audioSource.Play();
             Destroy(other.transform.parent.gameObject);
         }
         

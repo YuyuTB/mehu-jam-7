@@ -4,8 +4,11 @@ using UnityEngine.SceneManagement;
 
 public class BossEnemy : MonoBehaviour
 {
-    private void OnDestroy()
+    private void OnCollisionEnter2D(Collision2D other)
     {
-        SceneManager.LoadScene("Victory");
+        if (other.gameObject.CompareTag("Fireball"))
+        {
+            SceneManager.LoadScene("Victory");
+        }
     }
 }
