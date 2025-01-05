@@ -3,6 +3,7 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     private const float ProjectileSpeed = 10f;
+    private const float ProjectileLifetime = 0.5f;
     private Vector2 _direction;
     
     private bool _isGoingLeft;
@@ -13,6 +14,7 @@ public class Bullet : MonoBehaviour
     void Update()
     {
         Move();
+        CountdownToExpire();
     }
     
     // Initialize the fireball with the character movement on instantiation
@@ -25,22 +27,26 @@ public class Bullet : MonoBehaviour
         _enemyMovement = enemyMovement;
         _spriteRenderer.flipX = _enemyMovement.isGoingLeft;
         _isGoingLeft = _enemyMovement.isGoingLeft;
-        _direction = -direction.normalized;
-        _direction.y = 0;
+        _direction = direction.normalized;
     }
-    
+
     private void Move()
     {
         transform.Translate(
-            _direction * (ProjectileSpeed * Time.deltaTime * (_isGoingLeft ? -1 : 1))
+                _direction * (ProjectileSpeed * Time.deltaTime)
         );
     }
     
-    private void OnCollisionEnter2D(Collision2D other)
+    private void CountdownToExpire()
+    {
+        Destroy(gameObject, ProjectileLifetime);
+    }
+    
+    private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            Destroy(other.gameObject);
+            other.gameObject.transform.parent.GetComponent<CharacterDeath>().KillCharacter();
         }
         
         if (other.gameObject.CompareTag("Wall"))

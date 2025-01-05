@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -17,10 +16,10 @@ public class MainMenu : MonoBehaviour
         _startGameButton = transform.Find("StartGame").GetComponent<Button>();
         _controllerInputButton = transform.Find("InputGamepad").GetComponent<Button>();
         _keyboardInputButton = transform.Find("InputMNK").GetComponent<Button>();
-        
-        // Set the initial selected button for gamepad navigation
-        EventSystem.current.SetSelectedGameObject(_startGameButton.gameObject);
 
+        // Set the initial selected button for gamepad navigation
+        EventSystem.current.SetSelectedGameObject(_controllerInputButton.gameObject);
+        
         // Change the color of the disabled state
         ColorBlock cb = _startGameButton.colors;
         cb.disabledColor = Color.gray;
@@ -34,7 +33,7 @@ public class MainMenu : MonoBehaviour
         _keyboardInputButton.onClick.AddListener(() => ChooseInput(InputType.Keyboard));
         
         // Set the initial selected button for gamepad navigation
-        EventSystem.current.SetSelectedGameObject(_startGameButton.gameObject);
+        EventSystem.current.SetSelectedGameObject(_controllerInputButton.gameObject);
     }
     
     

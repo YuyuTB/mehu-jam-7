@@ -14,7 +14,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2193203595309665250, guid: 649771f65d741634da570e255e0859f1, type: 3}
       propertyPath: m_Name
-      value: Soup (1) Variant
+      value: Soup_Blue
       objectReference: {fileID: 0}
     - target: {fileID: 8407934250651740939, guid: 649771f65d741634da570e255e0859f1, type: 3}
       propertyPath: m_Sprite
@@ -30,11 +30,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8655955519656803727, guid: 649771f65d741634da570e255e0859f1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4.09
+      value: 1.02
       objectReference: {fileID: 0}
     - target: {fileID: 8655955519656803727, guid: 649771f65d741634da570e255e0859f1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.74
+      value: -3.69
       objectReference: {fileID: 0}
     - target: {fileID: 8655955519656803727, guid: 649771f65d741634da570e255e0859f1, type: 3}
       propertyPath: m_LocalPosition.z

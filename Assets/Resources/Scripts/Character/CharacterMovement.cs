@@ -63,7 +63,8 @@ public class CharacterMovement : MonoBehaviour
         {
             return;
         }
-        if (_isTouchingWallLeft && horizontal < 0)
+        if (_isTouchingWallLeft 
+            && horizontal < 0)
         {
             return;
         } 
@@ -79,7 +80,7 @@ public class CharacterMovement : MonoBehaviour
 
     private void Jump()
     {
-        jumpHeight = _characterResolution.isLowDefinition ? 5f : 10f;
+        jumpHeight = _characterResolution.isLowDefinition ? 12f : 15f;
         
         if (isGrounded && Input.GetAxis("Jump") > 0)
         {
@@ -115,7 +116,9 @@ public class CharacterMovement : MonoBehaviour
     
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.CompareTag("Ground"))
+        if (other.gameObject.CompareTag("Ground") 
+            && !_isTouchingWallLeft
+            && !_isTouchingWallRight)
         {
             isGrounded = true;
         }

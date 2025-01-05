@@ -86,7 +86,11 @@ public class EnemyAttack : MonoBehaviour
         Vector2 direction = (_playerTransform.position - transform.position).normalized;
         Vector2 bulletPosition = transform.position;
         bulletPosition.y -= 0.2f;
-        bulletPosition.x += _enemyMovement.isGoingLeft ? -transform.localScale.x : transform.localScale.x;
+        bulletPosition.x += direction.x < 0 ? -0.5f : 0.5f; // Adjust the bullet's x position based on the direction
+
+        // Make the enemy face the player
+        _enemyMovement.isGoingLeft = direction.x < 0;
+        
         Bullet bullet = Instantiate(_bullet, bulletPosition, Quaternion.identity);
         bullet.Initialize(_enemyMovement, direction);
     }
@@ -96,7 +100,7 @@ public class EnemyAttack : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            Destroy(other.gameObject);
+            other.gameObject.transform.parent.GetComponent<CharacterDeath>().KillCharacter();
         }
     }
 }
